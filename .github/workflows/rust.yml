@@ -23,7 +23,7 @@ jobs:
       - name: Toolchain Setup
         uses: actions-rust-lang/setup-rust-toolchain@v1
         with:
-          components: [cargo, clippy, rustfmt]
+          components: rustfmt
 
       - name: Toolchain Info
         run: |
