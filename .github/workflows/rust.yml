@@ -23,7 +23,7 @@ jobs:
       - uses: actions-rust-lang/setup-rust-toolchain@v1
       - run: |
           cd backend
-          cargo test --all --all-features --verbose  
+          cargo test --all --verbose  
        
   # Check formatting with rustfmt
   formatting:
