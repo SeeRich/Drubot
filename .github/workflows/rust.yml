@@ -1,4 +1,4 @@
-name: Backend
+name: Backend CI
 
 on:
   push:
@@ -10,39 +10,50 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  build:
+  
+  test:
+    name: Cargo test
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         rust: [stable]
         os: [ubuntu-latest, windows-latest, macOS-latest]
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Toolchain Setup
-        uses: actions-rust-lang/setup-rust-toolchain@v1
+      - uses: actions/checkout@v4
+      - uses: actions-rust-lang/setup-rust-toolchain@v1
+      - run: |
+          cd backend
+          cargo test --all --all-features --verbose  
+       
+  # Check formatting with rustfmt
+  formatting:
+    name: Cargo fmt
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        rust: [stable]
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+    steps:
+      - uses: actions/checkout@v4
+      # Ensure rustfmt is installed and setup problem matcher
+      - uses: actions-rust-lang/setup-rust-toolchain@v1
         with:
           components: rustfmt
-
-      - name: Toolchain Info
-        run: |
-          cargo --version --verbose
-          rustc --version
-          cargo clippy --version          
-
-      - name: Formatting
-        run: |
+      - run: |
           cd backend
           cargo fmt -- --check
-          cargo clippy -- -D warnings          
+          cargo clippy -- -D warnings 
 
-      - name: Test
-        run: |
-          cd backend
-          cargo test --all --all-features --verbose      
+      # - name: Toolchain Info
+      #   run: |
+      #     cargo --version --verbose
+      #     rustc --version
+      #     cargo clippy --version          
+         
 
-      - name: Build
-        run: |
-          cd backend
-          cargo build --release --verbose
+    
+
+      # - name: Build
+      #   run: |
+      #     cd backend
+      #     cargo build --release --verbose
