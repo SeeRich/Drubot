@@ -4,7 +4,7 @@ import { useEffect } from "react";
 
 export default function WebSocketComponent() {
   useEffect(() => {
-    const socket = new WebSocket("ws://localhost:4000/ws");
+    const socket = new WebSocket("wss://drubot.localhost/api/ws");
 
     socket.addEventListener("open", function (event) {
       socket.send("Hello Server!");

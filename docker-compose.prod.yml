@@ -1,0 +1,13 @@
+# TODO
+version: "3.8"
+services: 
+  frontend:
+    # SEE: https://medium.com/@elifront/best-next-js-docker-compose-hot-reload-production-ready-docker-setup-28a9125ba1dc
+    container_name: frontend
+    build:
+      context: ./frontend
+    restart: always #change if you don't want your container restarting
+    environment:
+      - NODE_ENV=production
+    networks:
+      - caddy

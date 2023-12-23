@@ -1,7 +1,6 @@
 use std::{io, path::PathBuf};
 
 use bytesize::ByteSize;
-use dirs;
 use file_rotate::{
     compression::Compression,
     suffix::{AppendTimestamp, FileLimit},

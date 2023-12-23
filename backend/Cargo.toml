@@ -8,12 +8,17 @@ publish = false
 candle-core = { version = "0.3.0" }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
-jsonwebtoken = "8.0"
-axum = { version = "0.6.20", features = ["headers", "ws"] }
+axum = { version = "0.7", features = ["ws"] }
+axum-extra = { version = "0.9.0", features = [
+    "typed-header",
+    "form",
+    "protobuf",
+    "multipart",
+] }
 tower = { version = "0.4", features = ["util"] }
-tower-http = { version = "0.4.0", features = ["fs", "trace", "cors"] }
+tower-http = { version = "0.5", features = ["fs", "trace", "cors"] }
 tokio = { version = "1.0", features = ["full"] }
-tokio-tungstenite = "0.20"
+tokio-tungstenite = "0.21"
 futures = "0.3"
 futures-util = { version = "0.3", default-features = false, features = [
     "sink",
@@ -27,7 +32,17 @@ file-rotate = "0.7.5"
 bytesize = "1.3.0"
 log = "0.4"
 once_cell = "1.8"
+sqlx = { version = "0.7", features = [
+    "runtime-tokio",
+    "postgres",
+    "migrate",
+    "uuid",
+    "time",
+    "json",
+] }
 
+[dev-dependencies]
+sqlx-cli = { version = "0.7.3", features = ["postgres"] }
 
 [features]
 # Enables parallel processing support by enabling the "rayon" feature of jpeg-decoder.

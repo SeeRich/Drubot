@@ -1,0 +1,67 @@
+version: "3.8"
+networks:
+  caddy:
+services:
+  caddy:
+    image: caddy:latest
+    restart: unless-stopped
+    container_name: caddy
+    ports:
+      - 80:80
+      - 443:443
+    networks:
+      - caddy
+    volumes:
+      - ./containers/caddy/Caddyfile:/etc/caddy/Caddyfile
+      - ./containers/caddy/site:/srv
+      - ./containers/data/caddy/caddy_data:/data
+      - ./containers/data/caddy/caddy_config:/config
+  frontend:
+    container_name: frontend
+    build:
+      context: ./frontend
+      target: dev
+    restart: always
+    command: npm run dev
+    environment:
+      - NODE_ENV=development
+    # ports:
+    #   - 3000:3000
+    networks:
+      - caddy
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - /app/.next
+  db:
+    image: postgres:16-alpine
+    container_name: pgdb
+    restart: always
+    # Expose db on localhost (it is only accessed through backend API)
+    ports:
+      - "5432:5432"
+    networks:
+      - caddy
+    environment:
+      POSTGRES_USER: drubot
+      POSTGRES_PASSWORD: development
+    volumes:
+      - ./containers/data/pg/pg_data:/var/lib/postgresql/data
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    restart: always
+    networks:
+      - caddy
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@drubot.com
+      PGADMIN_DEFAULT_PASSWORD: development
+      PGADMIN_LISTEN_PORT: 5434
+    volumes:
+      - ./containers/data/pg/pg_admin:/var/lib/postgresql/data
+volumes:
+  caddy_data:
+    external: true
+  caddy_config:
+  pg_data:
+  pg_admin:
